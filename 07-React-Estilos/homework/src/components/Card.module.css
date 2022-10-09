@@ -1,0 +1,41 @@
+.card{
+    border: none;
+    border-radius: 1rem;
+    width: fit-content;
+    font-weight: 600;
+    margin: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lightblue;
+    transition: .5s;
+}
+
+.card:hover{
+    background-color: purple;
+    box-shadow: 0 0 1rem red, 0 0 4rem red, 0 0 8rem red;
+}
+
+.btn{
+    background-color: #e63946;
+    /* width: 1.2rem; */
+    border-radius: 2rem;
+    /* padding: .2rem; */
+    align-self: flex-end;
+    color: white;
+    border: none;
+    font-weight: 600;
+    transition: .5s;
+}
+
+.btn:hover{
+    color: #e63946;
+    background-color: white;
+    box-shadow: 0 0 1rem #ff0000, 0 0 4rem #ff0000, 0 0 8rem #ff0000;
+}
+
+.data{
+    display: flex;
+    flex-direction: column;
+}
