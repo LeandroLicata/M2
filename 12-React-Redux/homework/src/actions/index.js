@@ -1,33 +1,37 @@
-export const ADD_MOVIE_FAVORITE = "ADD_MOVIE_FAVORITE"
-export const GET_MOVIES = "GET_MOVIES"
-export const REMOVE_MOVIE_FAVORITE = "REMOVE_MOVIE_FAVORITE"
-export const GET_MOVIE_DETAIL = "GET_MOVIE_DETAIL"
+import { 
+    GET_MOVIE, 
+    ADD_MOVIE_FAVORITE,
+    REMOVE_MOVIE_FAVORITE,
+    MOVIE_DETAIL,
+    CLEAN_DETAIL
+} from "./action-types";
 
-export function addMovieFavorite(payload) {
-    return { type: ADD_MOVIE_FAVORITE, payload };
-}
+const apiKey = 'fb51de37';
 
-export function getMovies(titulo) {
-    return function(dispatch) {
-        return fetch("http://www.omdbapi.com/?i=tt3896198&apikey=c18e7944&s=" + titulo)
+export const getMovie = (titulo) => {
+    return function(dispatch){
+        fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${titulo}`)
         .then(response => response.json())
-        .then(json => {
-            dispatch({ type: GET_MOVIES, payload: json });
-        });
-    };
+        .then(obj => dispatch({type: GET_MOVIE, payload: obj}))
+    }
 }
 
-export function removeMovieFavorite(payload) {
-    return { type: REMOVE_MOVIE_FAVORITE, payload };
-}
-
-export function getMovieDetail(titulo) {
-    return function(dispatch) {
-        return fetch("http://www.omdbapi.com/?i=tt3896198&apikey=c18e7944&s=" + titulo)
+export const getMovieDetail = (id) => {
+    return function(dispatch){
+        fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${id}`)
         .then(response => response.json())
-        .then(json => {
-            dispatch({ type: GET_MOVIE_DETAIL, payload: json });
-        });
-    };
+        .then(obj => dispatch({type: MOVIE_DETAIL, payload: obj}))
+    }
+}
 
+export const addMovieFavorite = (movie) => {
+    return {type: ADD_MOVIE_FAVORITE, payload: movie}
+}
+
+export const removeMovieFavorite = (id) => {
+    return {type: REMOVE_MOVIE_FAVORITE, payload: id}
+}
+
+export const cleanDetail = () => {
+    return {type: CLEAN_DETAIL}
 }

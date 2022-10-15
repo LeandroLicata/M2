@@ -1,40 +1,52 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
-import './Favorites.css';
 import { removeMovieFavorite } from "../../actions";
+import './Favorites.css';
 
 export class ConnectedList extends Component {
+  constructor(props){
+    super(props)
+  }
+
+  handleClick(id){
+    this.props.removeMovieFavorite(id)
+  }
 
   render() {
     return (
       <div>
         <h2>Películas Favoritas</h2>
         <ul>
-          {this.props.movies && this.props.movies.map(movie => 
-            <li>
-              <Link to={`/movie/${movie.id}`}>
-                {movie.title}
-              </Link>
-              <button onClick={() => this.props.removeMovieFavorite(movie.id)}>X</button>
-            </li>
-          )}
+          {
+            this.props.moviesFavorites.map(movie => {
+              return(
+                <li>
+                  <Link to={`/movie/${movie.id}`}>
+                    <span>{movie.Title}</span>
+                  </Link>
+                  <button onClick={() => this.handleClick(movie.id)} >x</button>
+                </li>
+              )
+            })
+          }
         </ul>
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    movies: state.moviesFavourites
+const mapStateToProps = (state) => {
+  return{
+    moviesFavorites: state.moviesFavorites
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    removeMovieFavorite: (id) => dispatch(removeMovieFavorite(id))
+const mapDispatchToProps = (dispatch) => {
+  return{
+    removeMovieFavorite: id => dispatch(removeMovieFavorite(id))
   }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectedList);

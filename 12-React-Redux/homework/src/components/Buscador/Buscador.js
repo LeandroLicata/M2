@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import './Buscador.css';
-import { addMovieFavorite, getMovies } from "../../actions";
+import { getMovie, getMovieDetail, addMovieFavorite } from "../../actions";
 
 
 export class Buscador extends Component {
@@ -17,7 +17,11 @@ export class Buscador extends Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.props.getMovies(this.state.title);
+    this.props.getMovie(this.state.title)
+  }
+
+  handleClick(movie){
+    this.props.addMovieFavorite(movie)
   }
 
   render() {
@@ -39,31 +43,38 @@ export class Buscador extends Component {
           <button type="submit">BUSCAR</button>
         </form>
         <ul>
-         {this.props.movies && this.props.movies.map(movie =>
-         <li>
-          <Link to={`/movie/${movie.imdbID}`}>
-          {movie.Title}
-          </Link>
-          <button onClick={() => this.props.addMovieFavorite({title: movie.Title, id: movie.imdbID})}>Fav</button>
-         </li>
-          )}
+         {
+          this.props.movies.map(movie => {
+            return(
+              <li>
+                <Link to={`/movie/${movie.imdbID}`}>
+                  <span>{movie.Title}</span>
+                </Link>
+                <button onClick={() => this.handleClick({
+                  id: movie.imdbID, Title: movie.Title
+                })} >♥️</button>
+              </li>
+            )
+          })
+         }
         </ul>
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    movies: state.moviesLoaded
-  };
+const mapStateToProps = (state) => { // selecciona del estado global, la prop que necesita
+  return{
+    movies: state.movies
+  }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addMovieFavorite: movie => dispatch(addMovieFavorite(movie)),
-    getMovies: title => dispatch(getMovies(title))
-  };
+const mapDispatchToProps = (dispatch) => { // despacha las acciones que necesita el componente
+  return{
+    getMovie: titulo => dispatch(getMovie(titulo)),
+    movieDetail: id => dispatch(getMovieDetail(id)),
+    addMovieFavorite: movie => dispatch(addMovieFavorite(movie))
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (Buscador);
+export default connect(mapStateToProps, mapDispatchToProps)(Buscador);

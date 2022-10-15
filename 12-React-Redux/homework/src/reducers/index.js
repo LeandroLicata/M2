@@ -1,42 +1,52 @@
 import { 
-    ADD_MOVIE_FAVORITE, 
-    GET_MOVIES, 
-    REMOVE_MOVIE_FAVORITE, 
-    GET_MOVIE_DETAIL
-} from '../actions/index'
+    GET_MOVIE,
+    ADD_MOVIE_FAVORITE,
+    REMOVE_MOVIE_FAVORITE,
+    MOVIE_DETAIL,
+    CLEAN_DETAIL
+} from "../actions/action-types"
 
 const initialState = {
-    moviesFavourites: [],
-    moviesLoaded: [],
+    movies: [],
+    moviesFavorites: [],
     movieDetail: {}
-};
-
-function rootReducer(state=initialState, action) {
-    if(action.type === ADD_MOVIE_FAVORITE) {
-        return {
-            ...state,
-            moviesFavourites: state.moviesFavourites.concat(action.payload)
-        }
-    }
-    if(action.type === GET_MOVIES) {
-        return {
-            ...state,
-            moviesLoaded: action.payload.Search
-        }
-    }
-    if(action.type === REMOVE_MOVIE_FAVORITE) {
-        return {
-            ...state,
-            moviesFavourites: state.moviesFavourites.filter(m => m.id !== action.payload)
-        }
-    }
-    if(action.type === GET_MOVIE_DETAIL) {
-        return {
-            ...state,
-            movieDetail: action.payload
-        }
-    }
-    return {...state};
 }
 
-export default rootReducer;
+export default function rootReducer(state = initialState, action){
+    switch(action.type){
+        case GET_MOVIE:
+            return{
+                ...state,
+                movies: action.payload.Search
+            }
+
+        case MOVIE_DETAIL:
+            return{
+                ...state,
+                movieDetail: action.payload
+            }
+        
+        case ADD_MOVIE_FAVORITE:
+            return{
+                ...state,
+                moviesFavorites: [...state.moviesFavorites, action.payload]
+            }
+
+        case REMOVE_MOVIE_FAVORITE:
+            return{
+                ...state,
+                moviesFavorites: state.moviesFavorites.filter(
+                    (movie) => movie.id !== action.payload 
+                )
+            }
+
+        case CLEAN_DETAIL:
+            return{
+                ...state,
+                movieDetail: {}
+            }
+
+        default:
+            return {...state}
+    }
+}
